@@ -1,6 +1,14 @@
 # KGBuilder-MC1
 Speed Presentation
 
+## Table of Contents
+
+1. [Problem & Use Cases](#1-problem--use-cases)
+2. [Proposed Schema Elements](#2-proposed-schema-elements)
+   - [Conceptual Model](#conceptual-model)
+   - [Ontology](#ontology)
+3. [Identifier Strategy](#3-identifier-strategy)
+
 ## 1-Problem & Use Cases
 
 ### Problem 
@@ -24,3 +32,15 @@ I've built a couple of application ontologies in the past, and I wanted to take 
 
 ## 2-Proposed Schema Elements
 
+### Conceptual Model
+![Conceptual Model](KGC-MC1-conceptual-model.png)
+![Graphical Notation](KGC-MC1-graphical-notation.png)
+
+### Ontology
+
+[Ontology (ttl)](ontology.ttl) - here is a Turtle file built using Protege. 
+
+![Protege](protege.png)
+
+
+## 3-Identifier Strategy
