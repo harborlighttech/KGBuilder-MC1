@@ -12,6 +12,8 @@ Speed Presentation
    - [Namespaces](#namespaces)
 4. [Graph Representation Choice](#4-graph-representation-choice)
 5. [Querying the KG](#5-querying-the-kg)
+   - [Top 2 Contributors](#top-2-contributors)
+   - [Dissenters of the DCA](#dissenters-of-the-dca)
 
 ----
 
@@ -27,13 +29,15 @@ I want to create a knowledge graph that helps me accomplish two main objectives:
 
 #### Scenario/Industry
 
-I've built a couple of application ontologies in the past, and I wanted to take a stab at something higher-level. I am looking to develop some pattern that can be applied across multiple industries. For this exercise, the scenarios I've chosen are 
+I've built a couple of application ontologies in the past, and I wanted to take a stab at something higher-level. I am looking to develop some pattern that can be applied across multiple industries. For this exercise, the scenarios I've chosen are: 
 
 1. Decision-making - in software development, there is a strategy called Architectural Decision Records (ADRs) that are typically used in Git repositories that summarize decisions made by a team  that are hard to decipher by reading an issue - especially lengthy issues. As a new person to the repository, it's hard to understand who the voices of authority and influence are, what pieces of content can be ignored, etc. An ADR is a summary of all this content (example: https://github.com/ESIPFed/science-on-schema.org/tree/main/decisions)
 
+2. Idea Generation - I've been interested in the Financial Independence, Retire Early movement. Over the past 10 years, I've listened to a ton of podcasts and read numerous blog articles. To form a set of beliefs about what I'm going to do and why. As times change, I wonder what are the impact to these beliefs as data changes (tax codes, investing options, etc). I envision A graph where for a given Idea, I can link back to the sources of data for that idea, who said them, etc. These ideas could be built on top of other ideas (Hence, my CognitiveEntity class subclassing from InformationObject). How do ideas or insights change over time?
+
 ### Use Cases
 
-1. Who are the top 5 people that contributed to my belief in that the "4% rule" is an effective retirement withdrawal strategy?
+1. Who are the top 2 people that contributed to my belief in that the "4% rule" is an effective retirement withdrawal strategy?
 2. What are all the decisions asserted by myself having any dissenters that supported the decision to invest in "data-centric architecture" that are stored in Github?
 
 ## 2-Proposed Schema Elements
@@ -79,6 +83,66 @@ Now, becuase my domain is about ideas and hypothesis and decisions, there is som
 
 ## 5-Querying-the-KG
 
-Given my [Use Cases](#use-cases)
-1. Who are the top 5 people that contributed to my belief in that the "4% rule" is an effective retirement withdrawal strategy?
-2. What are all the decisions asserted by myself having any dissenters that supported the decision to invest in "data-centric architecture" that are stored in Github?
+Given my [Use Cases](#use-cases), here are SPARQL queries that answer these questions. For simplicity, I ignore my use of UUIDs for the URNs to make the queries more readable. I created sample data in this repository and tested at: [SPARQL Playground](https://atomgraph.github.io/SPARQL-Playground/)
+
+### Top 2 contributors 
+CQ: Who are the top 5 people that contributed to my belief in that the "4% rule" is an effective retirement withdrawal strategy?
+
+Given, that `<urn:harborlighttech:dikw:four-percent-rule-is-effective>` is the subject URI for for my belief that the "4% rule" is effective,
+and the topic of "Retirement Withdrawal Strategy" is represented by the URI `<urn:harborlighttech:dikw:retirement-withdrawal-strategy>`:
+
+* [Sample data](top-2-people_sample-data.ttl)
+  
+```
+PREFIX dikw: <https://schema.harborlight.tech/ontology/dikw/v0.1/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX time: <http://www.w3.org/2006/time#>
+SELECT DISTINCT ?person ?name (COUNT(?data) as ?num)
+WHERE {
+   VALUES ?idea { <urn:harborlighttech:dikw:four-percent-rule-is-effective> }
+   ?idea a dikw:Idea .
+   ?idea dikw:about <urn:harborlighttech:dikw:retirement-withdrawal-strategy> .
+   ?idea dikw:supportedBy ?data .
+   ?data a dikw:SupportingData .
+   ?data dikw:attributedTo ?person .
+   ?person a prov:Person .
+   ?person dikw:name ?name .
+}
+GROUP BY ?person ?name
+ORDER BY DESC(COUNT(?data))
+LIMIT 2
+```
+
+### Dissenters of the DCA
+CQ: What are all the decisions that are supported by the decision to invest in "data-centric architecture", that were asserted by myself, having any dissenters, whose supporting data is stored in Github?
+
+Given, that `<urn:harborlighttech:dikw:adam-shepherd>` is the subject URI for myself,
+   and `<urn:harborlighttech:dikw:invest-in-data-centricity>` is the subject URI for the decision to invest in the data-centric architecture, 
+   and `<urn:harborlighttech:dikw:github>` is the subject URI for Github:
+
+* [Sample data](dissenters-of-the-dca.ttl)
+
+```
+PREFIX dikw: <https://schema.harborlight.tech/ontology/dikw/v0.1/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX time: <http://www.w3.org/2006/time#>
+SELECT DISTINCT ?decision ?name ?dissenter_name ?differing_idea_name
+WHERE {
+   ?decision a dikw:Decision .
+   ?decision dikw:assertedBy <urn:harborlighttech:dikw:adam-shepherd> .
+   ?decision dikw:supportedBy <urn:harborlighttech:dikw:invest-in-data-centricity> .
+   ?decision ^dikw:dissentsTo ?dissenter .
+   ?decision dikw:supportedBy ?data .
+   FILTER (?data != <urn:harborlighttech:dikw:invest-in-data-centricity>)
+   ?data dikw:provider <urn:harborlighttech:dikw:github> .
+   OPTIONAL { ?decision dikw:name ?name }
+   ?dissenter dikw:performedBy/dikw:name ?dissenter_name .
+   OPTIONAL {
+    ?dissenter dikw:contraposes ?differing_idea .
+    OPTIONAL { ?differing_idea dikw:name ?differing_idea_name }
+   }
+}
+```
+
+
+   
