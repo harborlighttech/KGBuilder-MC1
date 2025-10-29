@@ -6,8 +6,10 @@ Speed Presentation
 1. [Problem & Use Cases](#1-problem--use-cases)
 2. [Proposed Schema Elements](#2-proposed-schema-elements)
    - [Conceptual Model](#conceptual-model)
-   - [Ontology](#ontology)
+   - [Ontology](#ontology) ([ttl](ontology.ttl))
 3. [Identifier Strategy](#3-identifier-strategy)
+   - [Unique Identifiers](#unique-identifiers)
+   - [Namespaces](#namespaces)
 
 ## 1-Problem & Use Cases
 
@@ -34,6 +36,10 @@ I've built a couple of application ontologies in the past, and I wanted to take 
 
 ### Conceptual Model
 ![Conceptual Model](KGC-MC1-conceptual-model.png)
+
+----
+
+#### Graphical Notation
 ![Graphical Notation](KGC-MC1-graphical-notation.png)
 
 ### Ontology
@@ -44,3 +50,17 @@ I've built a couple of application ontologies in the past, and I wanted to take 
 
 
 ## 3-Identifier Strategy
+
+I envision the use of this ontology for applications that are quick and easy (similar to Pinterest). Required fields are minimal. You want to be able to save some URL to a podcast, write a quick note, and go. Further annotation can happen afterward. This direction helps inform identifier strategy.
+
+### Unique Identifiers 
+
+**Ontology** - I chose URLs to identify classes, properties and named individuals. I want to publish this ontology at a website so that it can be shared and re-used. Becuase of this, I chose **slash termination** so that I have the freedom to use the hash terminator in URLs to be able to direct users to certain aspects of a webpage for the element being addressed at its ontology URI. This gives me downstream flexibility in case the website has individual webpages for its ontological element. For example, the `https://schema.harborlight.tech/ontology/dikw/v0.1/Dissenter` webpage may have certain elements with named anchor tags for: description, conceptual drawing, examples of usage, etc. the hash will let me direct a browser to these individual elements in web space while the slash terminator is used in ontology space.
+
+**Entities/Data** - Because I'm thinking data will be entered through some application, and the data seems to not be something publicly available in all cases, I think I'd lean towards using a URN structure like: `urn:harborlighttech:dikw:{uuid}`. With the `:url` property, web-accessible data can be accessed through this and then URL management (ex: link rot) is up to the user. 
+
+### Namespaces 
+
+I found a lot of similarity with PROV-O and could model most of what I had here with PROV, so I decided to use it as an upper-ontology for this work and extend my classes off of it. I need to investigate more the if some of my properties can be `rdfs:subPropertyOf` some of the relationships in PROV-O, but I feel like that decision can be made downstream, if appropriate to avoid causing any entanglements at the start.
+
+One of my classes, `AgentRole`, had a time component, and I noticed that `prov:Activity` had properties `startedAtTime` & `endedAtTime`, but I was hesitant to commit `AgentRole` to a `prov:Activity`. This is becuase PROV-O seems to describe _the past_, and I didn't want to make that assumption about my `AgentRole` just yet. For example, I might not know when an `AgentRole` had ended. A user might not ever supply that information. So, I left `AgentRole` as a standalone and then re-used the Time Ontology's `time:Instant` class for my start and end date. 
