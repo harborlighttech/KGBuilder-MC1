@@ -1,0 +1,65 @@
+PREFIX dikw: <https://schema.harborlight.tech/ontology/dikw/v0.1/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX : <http://example.org#>
+
+<urn:harborlighttech:dikw:adam-shepherd> a prov:Person .
+:jlc a prov:Person ;
+  dikw:name "JL Collins" .
+:mad-fi a prov:Person ;
+  dikw:name "Mad Fientist" .
+:mustache a prov:Person ;
+  dikw:name "Mr. Money Mustache" .
+
+:data-01 a dikw:InformationObject ;
+  dikw:provider <urn:harborlighttech:dikw:github> .
+
+:data-02 a dikw:Idea ;
+  dikw:provider <urn:harborlighttech:dikw:github> .
+
+:data-03 a dikw:Idea .
+
+:decision-01 a dikw:Decision;
+  dikw:supportedBy <urn:harborlighttech:dikw:invest-in-data-centricity>, :data-01 ;
+  dikw:assertedBy <urn:harborlighttech:dikw:adam-shepherd> ;
+  dikw:provider <urn:harborlighttech:dikw:github> ;
+  dikw:url "https://github.com/hlt/dca/blob/main/decision/D1.md" ;
+  dikw:name "Write Competency Questions for each Use Case" .
+  
+:decision-02 a dikw:Decision;
+  dikw:supportedBy <urn:harborlighttech:dikw:invest-in-data-centricity>, :data-01, :data-02 ;
+  dikw:assertedBy :jlc ;
+  
+  dikw:name "Build shared language" .
+
+:decision-03 a dikw:Decision;
+  dikw:supportedBy <urn:harborlighttech:dikw:invest-in-data-centricity>, :data-02 ;
+  dikw:assertedBy <urn:harborlighttech:dikw:adam-shepherd> ;
+  dikw:name "Adopt tools after building shared language" .
+
+:decision-04 a dikw:Decision;
+  dikw:supportedBy <urn:harborlighttech:dikw:invest-in-data-centricity>, :data-03 ;
+  dikw:provider <urn:harborlighttech:dikw:github> ;
+  dikw:url "https://github.com/hlt/dca/blob/main/decision/D4.md" ;
+  dikw:assertedBy <urn:harborlighttech:dikw:adam-shepherd> ;
+  dikw:name "Test CQs with SPARQL queries" .
+
+:decision-05 a dikw:Decision;
+  dikw:supportedBy :data-02 ;
+  dikw:url "https://example.com/images/testing-software.jpg" ;
+  dikw:name "Test Software with users" .
+
+:decision-06 a dikw:Decision;
+  dikw:supportedBy <urn:harborlighttech:dikw:invest-in-data-centricity>, :data-02 ;
+  dikw:assertedBy <urn:harborlighttech:dikw:adam-shepherd> ;
+  dikw:provider <urn:harborlighttech:dikw:github> ;
+  dikw:name "Iterate on development process. Start again by revisiting the CQs" .
+
+:dissent-01 a dikw:Dissenter ;
+  dikw:performedBy :mustache ;
+  dikw:dissentsTo :decision-01 ;
+  dikw:contraposes [
+    a dikw:Idea ;
+    dikw:name "Just get started building. Why wait?"
+  ] .
+  
