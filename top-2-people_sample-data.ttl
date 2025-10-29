@@ -1,0 +1,28 @@
+PREFIX dikw: <https://schema.harborlight.tech/ontology/dikw/v0.1/>
+PREFIX prov: <http://www.w3.org/ns/prov#>
+PREFIX time: <http://www.w3.org/2006/time#>
+PREFIX : <http://example.org#>
+
+:jlc a prov:Person ;
+  dikw:name "JL Collins" .
+:mad-fi a prov:Person ;
+  dikw:name "Mad Fientist" .
+:mustache a prov:Person ;
+  dikw:name "Mr. Money Mustache" .
+
+:data-01 a dikw:SupportingData ;
+  dikw:attributedTo :jlc .
+:data-02 a dikw:SupportingData ;
+  dikw:attributedTo :jlc .
+:data-03 a dikw:SupportingData ;
+  dikw:attributedTo :jlc .
+:data-04 a dikw:SupportingData ;
+  dikw:attributedTo :mad-fi . 
+:data-05 a dikw:SupportingData ;
+  dikw:attributedTo :mad-fi .
+:data-06 a dikw:SupportingData ;
+  dikw:attributedTo :mustache .
+
+<urn:harborlighttech:dikw:four-percent-rule-is-effective> a dikw:Idea ;
+  dikw:about <urn:harborlighttech:dikw:retirement-withdrawal-strategy> ;
+  dikw:supportedBy :data-01, :data-02, :data-03, :data-04, :data-05, :data-06 .
