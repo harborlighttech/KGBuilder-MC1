@@ -6,6 +6,7 @@
 @prefix prov: <http://www.w3.org/ns/prov#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix time: <http://www.w3.org/2006/time#> .
+@prefix schema: <https://schema.org/> .
 @base <https://schema.harborlight.tech/ontology/dikw/v0.1/> .
 
 <https://schema.harborlight.tech/ontology/dikw/v0.1/> rdf:type owl:Ontology .
@@ -39,7 +40,7 @@
               rdfs:label "attributedTo" .
 
 
-###  https://schema.harborlight.tech/ontology/dikw/v0.1/contraposes
+###  https://schema.harborlight.tech/ontology/dikw/v0.1/contraposesIdea
 :contraposesIdea rdf:type owl:ObjectProperty ;
                  rdfs:domain :Dissenter ;
                  rdfs:range :CognitiveEntity ;
@@ -149,6 +150,33 @@
              rdfs:range :SupportingData ;
              rdfs:comment "Links SupportingData to the CognitiveEntity that is asserting t as foundational to its truth." ;
              rdfs:label "supportedBy"@en-us .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  https://schema.harborlight.tech/ontology/dikw/v0.1/comment
+:comment rdf:type owl:DatatypeProperty ;
+         rdfs:range xsd:string ;
+         rdfs:label "comment" ;
+         rdfs:seeAlso rdfs:comment .
+
+
+###  https://schema.harborlight.tech/ontology/dikw/v0.1/name
+:name rdf:type owl:DatatypeProperty ,
+               owl:FunctionalProperty ;
+      rdfs:range xsd:string ;
+      rdfs:label "name" ;
+      rdfs:seeAlso schema:name .
+
+
+###  https://schema.harborlight.tech/ontology/dikw/v0.1/url
+:url rdf:type owl:DatatypeProperty ,
+              owl:FunctionalProperty ;
+     rdfs:range xsd:anyURI ;
+     rdfs:label "url" ;
+     rdfs:seeAlso schema:url .
 
 
 #################################################################
